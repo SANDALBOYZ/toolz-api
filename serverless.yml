@@ -17,13 +17,16 @@ service: sls-app
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
 
-# plugins:
-#   - serverless-webpack
+plugins:
+  - serverless-webpack
 
-# custom:
-#   webpack:
-#     webpackConfig: ./webpack.config.js
-#     includeModules: true
+package:
+  individually: true
+
+custom:
+  webpack:
+    webpackConfig: ./webpack.config.js
+    includeModules: true
 
 provider:
   name: aws
