@@ -42,4 +42,5 @@ functions:
   test:
     handler: index.hello
     events:
+      - http: GET /hello
       - http: 'GET /hello/{proxy+}'
