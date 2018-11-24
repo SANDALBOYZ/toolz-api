@@ -19,6 +19,7 @@ service: sls-app
 
 plugins:
   - serverless-webpack
+  - serverless-offline
 
 package:
   individually: true
@@ -38,3 +39,7 @@ functions:
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
+  test:
+    handler: index.hello
+    events:
+      - http: 'GET /hello/{proxy+}'
