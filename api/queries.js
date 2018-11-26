@@ -1,8 +1,12 @@
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 /**
  *  Constants
  */
 
-const EASYPOST_LOCATION_ID = 'gid://shopify/Location/7909146740'
+const EASYPOST_LOCATION_ID = process.env.EASYPOST_LOCATION_ID
 
 /**
  *  Queries
