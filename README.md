@@ -1,4 +1,4 @@
-# stockz-lambda
+# stockz
 
 This is an infantile [Lambda](https://aws.amazon.com/lambda/) service built using the [Serverless Framework](https://serverless.com/framework/) written in fancy ESNext. It is compiled with webpack + Babel.
 
