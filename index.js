@@ -2,7 +2,7 @@ import serverless from 'serverless-http'
 import express from 'express'
 import axios from 'axios'
 import { GraphQLClient } from 'graphql-request'
-import { get } from 'lodash'
+import { chunk, get } from 'lodash'
 import { getProductVariantQuery } from './queries'
 
 const EASYPOST_URL = 'https://api.easypost.com/fulfillment/vendor/v2'
@@ -28,12 +28,41 @@ const shopifyApiClient = new GraphQLClient(SHOPIFY_URL, {
 
 const app = express()
 
+/**
+ *  Grabs inventories from EasyPost for given `productIds`.
+ *  @function
+ *  @param {Array<String>} productIds - An array of EasyPost product IDs.
+ *
+ *  @return {Array<Object>} Returns an array of objects that correspond to the products and the warehouses they are housed at.
+ */
+const getInventories = async (productIds) => {
+  const chunkedProductIds = chunk(productIds, 28)
+
+  let inventoriesArray = []
+
+  for (const productIdsChunk of chunkedProductIds) {
+    const inventoriesResponse = await easypostApiClient.get('/inventories', {
+      params: {
+        product_ids: productIdsChunk,
+        includes: ['product']
+      }
+    })
+
+    const inventories = inventoriesResponse.data.inventories
+    console.log(inventories)
+
+    inventoriesArray = inventoriesArray.concat(inventories)
+  }
+
+  return inventoriesArray
+}
+
 app.get('/', async (req, res) => {
   try {
     const productsResponse = await easypostApiClient.get('/products', {
       params: {
-        limit: 10,
-        per_page: 10
+        limit: 50,
+        per_page: 50
       }
     })
 
@@ -41,14 +70,19 @@ app.get('/', async (req, res) => {
 
     const productIds = products.map(product => product.id)
 
-    const inventoriesResponse = await easypostApiClient.get('/inventories', {
-      params: {
-        product_ids: productIds,
-        includes: ['product']
-      }
-    })
+    console.log(productIds)
 
-    const inventories = inventoriesResponse.data.inventories
+    // const inventoriesResponse = await easypostApiClient.get('/inventories', {
+    //   params: {
+    //     product_ids: productIds,
+    //     includes: ['product']
+    //   }
+    // })
+
+    console.log('Using `getInventories`!')
+    const inventories = await getInventories(productIds)
+
+    console.log('Inventories:', inventories)
 
     // A map of total quantities available through EasyPost.
     const barcodeQuantityMap = inventories.reduce((memo, inventory) => {
@@ -78,9 +112,9 @@ app.get('/', async (req, res) => {
       }
     }
 
-    console.log('Inventory quantities were updated.')
+    console.log('Inventory quantities were synced.')
 
-    res.send('')
+    res.send('Inventory quantities were synced.')
   } catch (e) {
     console.log(e)
     res.send('Oops, something broke!')

@@ -36,6 +36,7 @@ provider:
 functions:
   app:
     handler: index.handler
+    timeout: 60
     events:
       - http: ANY /
       - http: 'ANY {proxy+}'
