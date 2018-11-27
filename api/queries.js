@@ -6,7 +6,7 @@ dotenv.config()
  *  Constants
  */
 
-const EASYPOST_LOCATION_ID = process.env.EASYPOST_LOCATION_ID
+export const EASYPOST_LOCATION_ID = process.env.EASYPOST_LOCATION_ID
 
 /**
  *  Queries
@@ -60,6 +60,7 @@ export const inventoryBulkAdjustQuantityAtLocationMutation = `
       }
       inventoryLevels {
         id
+        available
       }
     }
   }
