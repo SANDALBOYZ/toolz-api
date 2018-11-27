@@ -42,6 +42,9 @@ const getInventories = async (productIds) => {
   return inventoriesArray
 }
 
+/**
+ *  This is the main function.
+ */
 const syncInventories = async () => {
   try {
     const productsResponse = await easypostApiClient.get('/products', {
@@ -125,7 +128,7 @@ export const handler = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'EasyPost <> Shopify product inventory sync started! This is an asynchronous process. Check the logs for more details.',
+      message: 'EasyPost <> Shopify product inventory sync started! This is an asynchronous process. Check the logs (`sls logs -f <appName>`) for more details.',
       input: event
     })
   }
