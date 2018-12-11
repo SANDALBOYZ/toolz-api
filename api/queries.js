@@ -7,6 +7,7 @@ dotenv.config()
  */
 
 export const EASYPOST_LOCATION_ID = process.env.EASYPOST_LOCATION_ID
+// export const SYNC_TAG = 'EP Sync'
 
 /**
  *  Queries
