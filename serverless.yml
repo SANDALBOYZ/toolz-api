@@ -46,7 +46,7 @@ functions:
     events:
       - http: GET /hello
       - http: 'GET /hello/{proxy+}'
-  syncProducts:
+  syncInventories:
     handler: syncInventories.handler
     events:
       - http: GET /syncInventories
