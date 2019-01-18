@@ -1,8 +1,13 @@
+import dotenv from 'dotenv'
+
+dotenv.config()
+
 /**
  *  Constants
  */
 
-const EASYPOST_LOCATION_ID = 'gid://shopify/Location/7909146740'
+export const EASYPOST_LOCATION_ID = process.env.EASYPOST_LOCATION_ID
+export const SYNC_TAG = 'Online'
 
 /**
  *  Queries
@@ -12,7 +17,7 @@ export const getProductVariantQuery = (barcode) => `
   query ProductVariants {
     productVariants(
       first: 2,
-      query: "barcode:'${barcode}' location:'${EASYPOST_LOCATION_ID}' tag:'Online'"
+      query: "barcode:'${barcode}' location:'${EASYPOST_LOCATION_ID}' tag:'${SYNC_TAG}'"
     ) {
       edges {
         node {
@@ -56,6 +61,7 @@ export const inventoryBulkAdjustQuantityAtLocationMutation = `
       }
       inventoryLevels {
         id
+        available
       }
     }
   }

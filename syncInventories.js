@@ -1,9 +1,17 @@
 import chalk from 'chalk'
 import { chunk, get } from 'lodash'
-import { easypostApiClient, shopifyApiClient, getProductVariantQuery } from './api'
+import {
+  easypostApiClient,
+  shopifyApiClient,
+  getProductVariantQuery,
+  inventoryBulkAdjustQuantityAtLocationMutation,
+  EASYPOST_LOCATION_ID
+} from './api'
 
 // The EasyPost `/inventories` endpoint can only intake a certain amount of `product_ids`.
-const MAX_EASYPOST_INVENTORIES_PRODUCT_IDS = 28
+const EASYPOST_MAX_INVENTORIES_PRODUCT_IDS = 28
+
+const SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS = 100
 
 /**
  *  Grabs inventories from EasyPost for given `productIds`.
@@ -13,7 +21,7 @@ const MAX_EASYPOST_INVENTORIES_PRODUCT_IDS = 28
  *                          products and the warehouses they are housed at.
  */
 const getInventories = async (productIds) => {
-  const chunkedProductIds = chunk(productIds, MAX_EASYPOST_INVENTORIES_PRODUCT_IDS)
+  const chunkedProductIds = chunk(productIds, EASYPOST_MAX_INVENTORIES_PRODUCT_IDS)
 
   let inventoriesArray = []
 
@@ -34,12 +42,15 @@ const getInventories = async (productIds) => {
   return inventoriesArray
 }
 
+/**
+ *  This is the main function.
+ */
 const syncInventories = async () => {
   try {
     const productsResponse = await easypostApiClient.get('/products', {
       params: {
-        limit: 200,
-        per_page: 200
+        limit: 250,
+        per_page: 250
       }
     })
 
@@ -65,6 +76,8 @@ const syncInventories = async () => {
       return memo
     }, {})
 
+    const inventoryItemAdjustments = []
+
     for (let barcode in barcodeQuantityMap) {
       const productVariant = await shopifyApiClient.request(getProductVariantQuery(barcode))
       const shopifyQuantity = get(productVariant, 'productVariants.edges[0].node.inventoryQuantity')
@@ -79,11 +92,30 @@ const syncInventories = async () => {
       console.log(`Correction (EasyPost qty - Shopify qty): ${correction}`)
 
       if (correction) {
-        console.log('Making call to Shopify to correct inventory! 🚀')
+        inventoryItemAdjustments.push({
+          availableDelta: Number(correction),
+          inventoryItemId: get(productVariant, 'productVariants.edges[0].node.inventoryItem.id')
+        })
       }
     }
 
-    console.log(`\n${chalk.green('Inventory quantities were synced! ✅')}`)
+    if (inventoryItemAdjustments.length) {
+      console.log('Making calls to Shopify to correct inventory! 🚀')
+
+      chunk(inventoryItemAdjustments, SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS).forEach(
+        async (inventoryItemAdjustmentsChunk) => {
+          const result = await shopifyApiClient.request(inventoryBulkAdjustQuantityAtLocationMutation, {
+            locationId: EASYPOST_LOCATION_ID,
+            inventoryItemAdjustments: inventoryItemAdjustmentsChunk
+          })
+
+          console.log(`\n${chalk.green('Inventory quantity chunk synced! ✅')}`)
+          console.log(result)
+        }
+      )
+    }
+
+    console.log(`\n${chalk.green('End of code reached.')}`)
   } catch (e) {
     console.log(`\n${chalk.red('Oops, something broke. 🧐')}`)
     console.log(e)
@@ -96,7 +128,7 @@ export const handler = async (event, context) => {
   return {
     statusCode: 200,
     body: JSON.stringify({
-      message: 'EasyPost <> Shopify product inventory sync started! This is an asynchronous process. Check the logs for more details.',
+      message: 'EasyPost <> Shopify product inventory sync started! This is an asynchronous process. Check the logs (`sls logs -f <appName>`) for more details.',
       input: event
     })
   }
