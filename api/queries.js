@@ -7,7 +7,7 @@ dotenv.config()
  */
 
 export const EASYPOST_LOCATION_ID = process.env.EASYPOST_LOCATION_ID
-// export const SYNC_TAG = 'EP Sync'
+export const SYNC_TAG = 'Online'
 
 /**
  *  Queries
@@ -17,7 +17,7 @@ export const getProductVariantQuery = (barcode) => `
   query ProductVariants {
     productVariants(
       first: 2,
-      query: "barcode:'${barcode}' location:'${EASYPOST_LOCATION_ID}' tag:'Online'"
+      query: "barcode:'${barcode}' location:'${EASYPOST_LOCATION_ID}' tag:'${SYNC_TAG}'"
     ) {
       edges {
         node {
