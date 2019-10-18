@@ -1,3 +1,9 @@
+import { chunk } from 'lodash'
+import {
+  easypostApiClient
+} from './api'
+import { EASYPOST_MAX_INVENTORIES_PRODUCT_IDS } from './constants'
+
 /**
  *  Grabs inventories from EasyPost for given `productIds`.
  *  @param  {Array<String>} `productIds` - An array of EasyPost product IDs.

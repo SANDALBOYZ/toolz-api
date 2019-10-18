@@ -9,9 +9,6 @@ import {
 } from './api'
 import { getInventories } from './helpers'
 
-// The EasyPost `/inventories` endpoint can only intake a certain amount of `product_ids`.
-const EASYPOST_MAX_INVENTORIES_PRODUCT_IDS = 28
-
 const SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS = 100
 
 /**
@@ -50,7 +47,7 @@ const syncInventories = async () => {
 
     const inventoryItemAdjustments = []
 
-    for (let barcode in barcodeQuantityMap) {
+    for (const barcode in barcodeQuantityMap) {
       const productVariant = await shopifyApiClient.request(getProductVariantQuery(barcode))
       const shopifyQuantity = get(productVariant, 'productVariants.edges[0].node.inventoryQuantity')
 

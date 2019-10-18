@@ -1,28 +1,21 @@
-import chalk from 'chalk'
-import { chunk, get } from 'lodash'
+import { get } from 'lodash'
 import {
-  easypostApiClient,
-  shopifyApiClient,
-  getProductVariantQuery,
-  inventoryBulkAdjustQuantityAtLocationMutation,
-  EASYPOST_LOCATION_ID
+  easypostApiClient
 } from './api'
-
-// The EasyPost `/inventories` endpoint can only intake a certain amount of `product_ids`.
-const EASYPOST_MAX_INVENTORIES_PRODUCT_IDS = 28
-
-const SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS = 100
+import { getInventories } from './helpers'
 
 /**
  *  Returns the total number of units in El Monte
  */
-async function getTotalInventoryQuantity() {
+async function getTotalInventoryQuantity () {
   const productsResponse = await easypostApiClient.get('/products', {
     params: {
       limit: 250,
       per_page: 250
     }
   })
+  const products = get(productsResponse, 'data.products')
+  const productIds = products.map(product => product.id)
 
   const inventories = await getInventories(productIds)
 
