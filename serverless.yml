@@ -51,3 +51,8 @@ functions:
     events:
       - http: GET /syncInventories
       - http: 'GET /syncInventories/{proxy+}'
+  getTotalInventoryQuantity:
+    handler: getTotalInventoryQuantity.handler
+    events:
+      - http: GET /getTotalInventoryQuantity
+      - http: 'GET /getTotalInventoryQuantity/{proxy+}'
