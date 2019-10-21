@@ -1,6 +1,11 @@
 # stockz
 
-This is an infantile [Lambda](https://aws.amazon.com/lambda/) service built using the [Serverless Framework](https://serverless.com/framework/) written in fancy ESNext. It is compiled with webpack + Babel.
+This is a collection of functions (or lambdas) that are used for inventory management between Shopify and EasyPost.
+
+## Technology
+
+- [serverless](https://serverless.com/cli/)
+- webpack + Babel
 
 ## References
 
@@ -10,5 +15,5 @@ This is an infantile [Lambda](https://aws.amazon.com/lambda/) service built usin
 ## Development
 
 1. Use `yarn` to install dependencies.
-2. Then, run `sls offline -s dev` to host the services locally.
+2. Then, run `yarn dev` to host the services locally.
 3. Hit an endpoint by going to `localhost:3000`.

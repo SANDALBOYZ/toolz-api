@@ -1,15 +1,16 @@
 {
   "name": "stockz",
   "version": "1.0.0",
-  "description": "",
+  "description": "A collection of inventory management tools for Shopify and EasyPost.",
   "main": "index.js",
   "scripts": {
+    "dev": "sls offline -s dev",
     "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "standard --verbose | snazzy",
     "lint:fix": "standard --fix"
   },
   "keywords": [],
-  "author": "",
+  "author": "ryan@sandalboyz.com",
   "license": "ISC",
   "dependencies": {
     "axios": "^0.19.0",

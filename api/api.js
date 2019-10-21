@@ -7,7 +7,7 @@ dotenv.config()
 const EASYPOST_URL = 'https://api.easypost.com/fulfillment/vendor/v2'
 const EASYPOST_ACCESS_TOKEN = process.env.EASYPOST_ACCESS_TOKEN
 
-export const easypostApiClient = axios.create({
+export const easyPostApiClient = axios.create({
   baseURL: EASYPOST_URL,
   auth: {
     username: EASYPOST_ACCESS_TOKEN

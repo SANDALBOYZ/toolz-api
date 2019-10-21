@@ -1,5 +1,5 @@
 import { chunk } from 'lodash'
-import { easypostApiClient } from '../api'
+import { easyPostApiClient } from '../api'
 
 const EASYPOST_MAX_INVENTORIES_PRODUCT_IDS = process.env.EASYPOST_MAX_INVENTORIES_PRODUCT_IDS || 28
 
@@ -16,7 +16,7 @@ export const getInventories = async (productIds) => {
   let inventoriesArray = []
 
   for (const productIdsChunk of chunkedProductIds) {
-    const inventoriesResponse = await easypostApiClient.get('/inventories', {
+    const inventoriesResponse = await easyPostApiClient.get('/inventories', {
       params: {
         product_ids: productIdsChunk,
         includes: ['product']
