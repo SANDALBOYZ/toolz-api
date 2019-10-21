@@ -24,17 +24,6 @@ provider:
   runtime: nodejs8.10
 
 functions:
-  app:
-    handler: index.handler
-    timeout: 60
-    events:
-      - http: ANY /
-      - http: 'ANY {proxy+}'
-  test:
-    handler: index.hello
-    events:
-      - http: GET /hello
-      - http: 'GET /hello/{proxy+}'
   syncInventories:
     handler: handlers.syncInventoriesHandler
     events:
