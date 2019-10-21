@@ -10,7 +10,7 @@ This is a collection of functions (or lambdas) that are used for inventory manag
 ## References
 
 - [EasyPost API](https://gist.github.com/att14/ff68a0f2684c711444864dcb1ebf6030)
-- [Shopify](https://help.shopify.com/en/api/graphql-admin-api)
+- [Shopify GraphQL Admin API](https://help.shopify.com/en/api/graphql-admin-api)
 
 ## Development
 
