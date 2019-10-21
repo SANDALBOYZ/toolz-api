@@ -23,8 +23,8 @@ const INVENTORY_BARCODE_BLACKLIST = [
 async function getTotalInventoryQuantity () {
   const productsResponse = await easyPostApiClient.get('/products', {
     params: {
-      limit: 250,
-      per_page: 250
+      limit: 300,
+      per_page: 300
     }
   })
   const products = get(productsResponse, 'data.products')

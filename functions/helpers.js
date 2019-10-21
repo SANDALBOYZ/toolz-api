@@ -1,6 +1,7 @@
 import { chunk } from 'lodash'
 import { easyPostApiClient } from '../api'
 
+// We can only grab 28 inventories at a time.
 const EASYPOST_MAX_INVENTORIES_PRODUCT_IDS = process.env.EASYPOST_MAX_INVENTORIES_PRODUCT_IDS || 28
 
 /**
