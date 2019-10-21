@@ -10,27 +10,28 @@ async function deleteProductsOnEasyPost (barcodePrefixes) {
 
   console.log(`barcodeRegEx: ${barcodeRegEx}`)
 
-  try {
-    const productsResponse = await easyPostApiClient.get('/products', {
-      params: {
-        limit: 250,
-        per_page: 250
-      }
-    })
+  const productsResponse = await easyPostApiClient.get('/products', {
+    params: {
+      limit: 250,
+      per_page: 250
+    }
+  })
 
-    const products = get(productsResponse, 'data.products')
+  const products = get(productsResponse, 'data.products')
 
-    const productsToDelete = products.filter(product =>
-      barcodeRegEx.test(product.barcode)
-    )
+  const productsToDelete = products.filter(product =>
+    barcodeRegEx.test(product.barcode)
+  )
 
-    productsToDelete.forEach(async (product) => {
-      console.log(`Deleting ${product.title}, ${product.barcode}`)
-      await easyPostApiClient.delete(`/product/${product.id}`)
-    })
-  } catch (e) {
-    console.log('error')
-  }
+  productsToDelete.forEach(async (product) => {
+    console.log(`Deleting ${product.title}, ${product.barcode}`)
+    try {
+      await easyPostApiClient.delete(`/products/${product.id}`)
+      console.log('✅')
+    } catch (e) {
+      console.log(`Error deleting product! ${e}`)
+    }
+  })
 }
 
 export const deleteProductsOnEasyPostHandler = async (event, context) => {
