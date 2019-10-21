@@ -1,7 +1,5 @@
 import { get } from 'lodash'
-import {
-  easypostApiClient
-} from './api'
+import { easyPostApiClient } from '../api'
 import { getInventories } from './helpers'
 
 // Change the array below to NOT count certain barcodes.
@@ -19,10 +17,11 @@ const INVENTORY_BARCODE_BLACKLIST = [
 ]
 
 /**
- *  Returns the total number of units in El Monte
+ *  Returns the total number of sandal units in El Monte.
+ *  The barcode blacklist above prevents this function from counting socks.
  */
 async function getTotalInventoryQuantity () {
-  const productsResponse = await easypostApiClient.get('/products', {
+  const productsResponse = await easyPostApiClient.get('/products', {
     params: {
       limit: 250,
       per_page: 250
@@ -44,7 +43,7 @@ async function getTotalInventoryQuantity () {
   return total
 }
 
-export const handler = async (event, context) => {
+export const getTotalInventoryQuantityHandler = async (event, context) => {
   const total = await getTotalInventoryQuantity()
 
   console.log(`Total units at EasyPost: ${total}`)

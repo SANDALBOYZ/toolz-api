@@ -36,12 +36,17 @@ functions:
       - http: GET /hello
       - http: 'GET /hello/{proxy+}'
   syncInventories:
-    handler: syncInventories.handler
+    handler: handlers.syncInventoriesHandler
     events:
       - http: GET /syncInventories
       - http: 'GET /syncInventories/{proxy+}'
   getTotalInventoryQuantity:
-    handler: getTotalInventoryQuantity.handler
+    handler: handlers.getTotalInventoryQuantityHandler
     events:
       - http: GET /getTotalInventoryQuantity
       - http: 'GET /getTotalInventoryQuantity/{proxy+}'
+  deleteProductsOnEasyPost:
+    handler: handlers.deleteProductsOnEasyPostHandler
+    events:
+      - http: GET /deleteProductsOnEasyPost
+      - http: 'GET /deleteProductsOnEasyPost/{proxy+}'

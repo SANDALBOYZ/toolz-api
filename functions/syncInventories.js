@@ -1,22 +1,22 @@
 import chalk from 'chalk'
 import { chunk, get } from 'lodash'
 import {
-  easypostApiClient,
+  easyPostApiClient,
   shopifyApiClient,
   getProductVariantQuery,
   inventoryBulkAdjustQuantityAtLocationMutation,
   EASYPOST_LOCATION_ID
-} from './api'
+} from '../api'
 import { getInventories } from './helpers'
 
-const SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS = 100
+const SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS = process.env.SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS || 100
 
 /**
- *  This is the main function.
+ *  Syncs Shopify product quantities to the quantities at EasyPost.
  */
 const syncInventories = async () => {
   try {
-    const productsResponse = await easypostApiClient.get('/products', {
+    const productsResponse = await easyPostApiClient.get('/products', {
       params: {
         limit: 250,
         per_page: 250
@@ -91,7 +91,7 @@ const syncInventories = async () => {
   }
 }
 
-export const handler = async (event, context) => {
+export const syncInventoriesHandler = async (event, context) => {
   syncInventories()
 
   return {
