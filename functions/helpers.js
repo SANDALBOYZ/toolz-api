@@ -25,7 +25,6 @@ export const getInventories = async (productIds) => {
     })
 
     const inventories = inventoriesResponse.data.inventories
-    console.log(inventories)
 
     inventoriesArray = inventoriesArray.concat(inventories)
   }
