@@ -6,6 +6,7 @@ dotenv.config()
  *  Constants
  */
 
+// Obtain by querying `locationsAvailableForDeliveryProfilesConnection` in Shopify Admin GraphQL
 export const EASYPOST_LOCATION_ID = process.env.EASYPOST_LOCATION_ID
 export const SYNC_TAG = 'Online'
 
