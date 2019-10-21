@@ -6,10 +6,10 @@ import {
   getProductVariantQuery,
   inventoryBulkAdjustQuantityAtLocationMutation,
   EASYPOST_LOCATION_ID
-} from './api'
+} from '../api'
 import { getInventories } from './helpers'
 
-const SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS = 100
+const SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS = process.env.SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS || 100
 
 /**
  *  This is the main function.
@@ -91,7 +91,7 @@ const syncInventories = async () => {
   }
 }
 
-export const handler = async (event, context) => {
+export const syncInventoriesHandler = async (event, context) => {
   syncInventories()
 
   return {

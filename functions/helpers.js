@@ -1,8 +1,7 @@
 import { chunk } from 'lodash'
-import {
-  easypostApiClient
-} from './api'
-import { EASYPOST_MAX_INVENTORIES_PRODUCT_IDS } from './constants'
+import { easypostApiClient } from '../api'
+
+const EASYPOST_MAX_INVENTORIES_PRODUCT_IDS = process.env.EASYPOST_MAX_INVENTORIES_PRODUCT_IDS || 28
 
 /**
  *  Grabs inventories from EasyPost for given `productIds`.

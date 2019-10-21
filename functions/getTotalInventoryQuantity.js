@@ -1,7 +1,5 @@
 import { get } from 'lodash'
-import {
-  easypostApiClient
-} from './api'
+import { easypostApiClient } from '../api'
 import { getInventories } from './helpers'
 
 // Change the array below to NOT count certain barcodes.
@@ -44,7 +42,7 @@ async function getTotalInventoryQuantity () {
   return total
 }
 
-export const handler = async (event, context) => {
+export const getTotalInventoryQuantityHandler = async (event, context) => {
   const total = await getTotalInventoryQuantity()
 
   console.log(`Total units at EasyPost: ${total}`)
