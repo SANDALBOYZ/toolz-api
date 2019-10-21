@@ -12,7 +12,7 @@ import { getInventories } from './helpers'
 const SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS = process.env.SHOPIFY_MAX_INVENTORIES_PRODUCT_IDS || 100
 
 /**
- *  This is the main function.
+ *  Syncs Shopify product quantities to the quantities at EasyPost.
  */
 const syncInventories = async () => {
   try {

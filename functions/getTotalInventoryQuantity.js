@@ -17,7 +17,8 @@ const INVENTORY_BARCODE_BLACKLIST = [
 ]
 
 /**
- *  Returns the total number of units in El Monte
+ *  Returns the total number of sandal units in El Monte.
+ *  The barcode blacklist above prevents this function from counting socks.
  */
 async function getTotalInventoryQuantity () {
   const productsResponse = await easypostApiClient.get('/products', {
