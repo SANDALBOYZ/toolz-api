@@ -1,3 +1,4 @@
 [build]
   command = "echo hi"
+  publish = 'index.html'
   functions = "./functions"
