@@ -34,6 +34,7 @@ async function deleteProductsOnEasyPost (barcodePrefixes) {
   })
 }
 
+// Pass barcode prefixes as a query parameter, i.e. `/deleteProductsOnEasyPost?barcodePrefixes=foo&barcodePrefixes=bar`
 export const deleteProductsOnEasyPostHandler = async (event, context) => {
   await deleteProductsOnEasyPost(event.multiValueQueryStringParameters.barcodePrefixes)
 
