@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { stripIndent, stripIndents } from 'common-tags'
+import { get } from 'lodash'
 import { parseString } from 'xml2js'
 import { easyPostApiClient } from '../api'
 
@@ -10,8 +11,8 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
   console.log('Fetching `order_returns` from EasyPost')
   const orderReturnsResponse = await easyPostApiClient.get('/order_returns', {
     params: {
-      limit: 50,
-      per_page: 50
+      limit: 30,
+      per_page: 30
     }
   })
 
@@ -49,17 +50,33 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
 
   console.log('Parsing XML...')
 
-  let trackingResult
+  let trackingResults
   parseString(response.data, (err, result) => {
     console.log(err)
     console.log(result)
-    trackingResult = result
+    trackingResults = result
   })
 
-  console.log('\n\n\n')
+  const orderReturnStatus = orderReturnsResponse.data.order_returns.map((orderReturn) => {
+    const trackingResult = trackingResults.TrackResponse.TrackInfo.find(
+      (trackInfo) => {
+        console.log(trackInfo)
+        return trackInfo.$.ID === orderReturn.tracking_code
+      }
+    )
+
+    return {
+      id: orderReturn.tracking_code,
+      name: orderReturn.order.name,
+      origin: `${orderReturn.origin_address.city}, ${orderReturn.origin_address.zip}`,
+      tracking: orderReturn.tracking_code,
+      items: orderReturn.line_items.map(lineItem => lineItem.product.title).join(', '),
+      status: get(trackingResult, 'Status[0]') || 'Unavailable'
+    }
+  })
 
   return {
     statusCode: 200,
-    body: JSON.stringify(trackingResult)
+    body: JSON.stringify(orderReturnStatus)
   }
 }
