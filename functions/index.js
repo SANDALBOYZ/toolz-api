@@ -1,3 +1,5 @@
 export * from './deleteProductsOnEasyPost'
+export * from './generateBarcodes'
 export * from './getTotalInventoryQuantity'
 export * from './syncInventories'
+export * from './test'

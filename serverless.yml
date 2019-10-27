@@ -24,6 +24,11 @@ provider:
   runtime: nodejs8.10
 
 functions:
+  test:
+    handler: handlers.testHandler
+    events:
+      - http: GET /test
+      - http: 'GET /test/{proxy+}'
   syncInventories:
     handler: handlers.syncInventoriesHandler
     events:
@@ -39,3 +44,8 @@ functions:
     events:
       - http: GET /deleteProductsOnEasyPost
       - http: 'GET /deleteProductsOnEasyPost/{proxy+}'
+  generateBarcodes:
+    handler: handlers.generateBarcodesHandler
+    events:
+      - http: GET /generateBarcodes
+      - http: 'GET /generateBarcodes/{proxy+}'

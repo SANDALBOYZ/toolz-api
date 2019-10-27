@@ -1,11 +1,15 @@
 import {
   deleteProductsOnEasyPostHandler,
+  generateBarcodesHandler,
   getTotalInventoryQuantityHandler,
-  syncInventoriesHandler
+  syncInventoriesHandler,
+  testHandler
 } from './functions'
 
 export {
   deleteProductsOnEasyPostHandler,
+  generateBarcodesHandler,
   getTotalInventoryQuantityHandler,
-  syncInventoriesHandler
+  syncInventoriesHandler,
+  testHandler
 }
