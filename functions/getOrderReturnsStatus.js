@@ -28,8 +28,6 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
     `
   }, '')
 
-  console.log(trackIdXmlString)
-
   // const trackId = '9405536895357093744150'
   // const xmlRequest = stripIndent`
   //   <TrackRequest USERID="${USER_ID}">
@@ -46,13 +44,10 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
     </TrackFieldRequest>
   `
 
-  console.log(xmlRequestBody)
-
+  console.log(`Fetching tracking information for ${orderReturnsResponse.data.order_returns.length} shipments from USPS API`)
   const response = await axios.get(`${USPS_API_URL}?API=TrackV2&XML=${xmlRequestBody}`)
 
-  console.log(response)
-
-  console.log('\n\n\n')
+  console.log('Parsing XML...')
 
   let trackingResult
   parseString(response.data, (err, result) => {
@@ -60,8 +55,6 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
     console.log(result)
     trackingResult = result
   })
-
-  console.log(response.data)
 
   console.log('\n\n\n')
 
