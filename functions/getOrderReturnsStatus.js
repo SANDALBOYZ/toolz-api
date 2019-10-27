@@ -5,7 +5,8 @@ import { parseString } from 'xml2js'
 import { easyPostApiClient } from '../api'
 
 const USER_ID = process.env.USPS_API_USER_ID
-const USPS_API_URL = process.env.USPS_API_URL || 'https://secure.shippingapis.com/shippingapi.dll'
+const USPS_API_URL =
+  process.env.USPS_API_URL || 'https://secure.shippingapis.com/shippingapi.dll'
 
 export const getOrderReturnsStatusHandler = async (event, context) => {
   console.log('Fetching `order_returns` from EasyPost')
@@ -22,12 +23,15 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
   // tracking: `order_returns[x].tracking_code`
   // items: `order_returns[x].line_items[].product.title` or `order_returns[x].line_items[].product.barcode`
 
-  const trackIdXmlString = orderReturnsResponse.data.order_returns.reduce((xmlString, orderReturn) => {
-    return stripIndents`
+  const trackIdXmlString = orderReturnsResponse.data.order_returns.reduce(
+    (xmlString, orderReturn) => {
+      return stripIndents`
       ${xmlString}
       <TrackID ID="${orderReturn.tracking_code}" />
     `
-  }, '')
+    },
+    ''
+  )
 
   // const trackId = '9405536895357093744150'
   // const xmlRequest = stripIndent`
@@ -45,8 +49,14 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
     </TrackFieldRequest>
   `
 
-  console.log(`Fetching tracking information for ${orderReturnsResponse.data.order_returns.length} shipments from USPS API`)
-  const response = await axios.get(`${USPS_API_URL}?API=TrackV2&XML=${xmlRequestBody}`)
+  console.log(
+    `Fetching tracking information for ${
+      orderReturnsResponse.data.order_returns.length
+    } shipments from USPS API`
+  )
+  const response = await axios.get(
+    `${USPS_API_URL}?API=TrackV2&XML=${xmlRequestBody}`
+  )
 
   console.log('Parsing XML...')
 
@@ -57,23 +67,29 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
     trackingResults = result
   })
 
-  const orderReturnStatus = orderReturnsResponse.data.order_returns.map((orderReturn) => {
-    const trackingResult = trackingResults.TrackResponse.TrackInfo.find(
-      (trackInfo) => {
-        console.log(trackInfo)
-        return trackInfo.$.ID === orderReturn.tracking_code
-      }
-    )
+  const orderReturnStatus = orderReturnsResponse.data.order_returns.map(
+    orderReturn => {
+      const trackingResult = trackingResults.TrackResponse.TrackInfo.find(
+        trackInfo => {
+          console.log(trackInfo)
+          return trackInfo.$.ID === orderReturn.tracking_code
+        }
+      )
 
-    return {
-      id: orderReturn.tracking_code,
-      name: orderReturn.order.name,
-      origin: `${orderReturn.origin_address.city}, ${orderReturn.origin_address.zip}`,
-      tracking: orderReturn.tracking_code,
-      items: orderReturn.line_items.map(lineItem => lineItem.product.title).join(', '),
-      status: get(trackingResult, 'Status[0]') || 'Unavailable'
+      return {
+        id: orderReturn.tracking_code,
+        name: orderReturn.order.name,
+        origin: `${orderReturn.origin_address.city}, ${
+          orderReturn.origin_address.zip
+        }`,
+        tracking: orderReturn.tracking_code,
+        items: orderReturn.line_items
+          .map(lineItem => lineItem.product.title)
+          .join(', '),
+        status: get(trackingResult, 'Status[0]') || 'Unavailable'
+      }
     }
-  })
+  )
 
   return {
     statusCode: 200,
