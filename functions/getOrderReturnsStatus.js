@@ -1,52 +1,64 @@
 import axios from 'axios'
-import { stripIndent } from 'common-tags'
+import { stripIndent, stripIndents } from 'common-tags'
 import { parseString } from 'xml2js'
 import { easyPostApiClient } from '../api'
 
+const USER_ID = process.env.USPS_API_USER_ID
+const USPS_API_URL = process.env.USPS_API_URL || 'https://secure.shippingapis.com/shippingapi.dll'
+
 export const getOrderReturnsStatusHandler = async (event, context) => {
+  console.log('Fetching `order_returns` from EasyPost')
   const orderReturnsResponse = await easyPostApiClient.get('/order_returns', {
     params: {
-      limit: 250,
-      per_page: 250
+      limit: 50,
+      per_page: 50
     }
   })
 
-  console.log(`Order Returns: ${orderReturnsResponse.data.length.order_returns}`)
+  // name: `order_returns[x].order.name`
+  // origin zip: `order_returns[x].origin_address.zip`
+  // origin city: `order_returns[x].origin_address.city`
+  // tracking: `order_returns[x].tracking_code`
+  // items: `order_returns[x].line_items[].product.title` or `order_returns[x].line_items[].product.barcode`
 
-  const USER_ID = process.env.USPS_API_USER_ID
-  const USPS_API_URL = 'https://secure.shippingapis.com/shippingapi.dll?API=TrackV2&XML='
+  const trackIdXmlString = orderReturnsResponse.data.order_returns.reduce((xmlString, orderReturn) => {
+    return stripIndents`
+      ${xmlString}
+      <TrackID ID="${orderReturn.tracking_code}" />
+    `
+  }, '')
 
-  const requestTracking = (xmlRequest) => `${USPS_API_URL}${xmlRequest}`
+  console.log(trackIdXmlString)
 
-  const trackId = '9405536895357093744150'
+  // const trackId = '9405536895357093744150'
   // const xmlRequest = stripIndent`
   //   <TrackRequest USERID="${USER_ID}">
   //     <TrackID ID="${trackId}" />
   //   </TrackRequest>
   // `
 
-  const xmlRequest = stripIndent`
+  const xmlRequestBody = stripIndent`
     <TrackFieldRequest USERID="${USER_ID}">
       <Revision>1</Revision>
       <ClientIp>111.0.0.1</ClientIp>
       <SourceId>XYZ Corp</SourceId>
-      <TrackID ID="${trackId}" />
+      ${trackIdXmlString}
     </TrackFieldRequest>
   `
 
-  console.log(xmlRequest)
+  console.log(xmlRequestBody)
 
-  console.log(requestTracking(xmlRequest))
-
-  const response = await axios.get(requestTracking(xmlRequest))
+  const response = await axios.get(`${USPS_API_URL}?API=TrackV2&XML=${xmlRequestBody}`)
 
   console.log(response)
 
   console.log('\n\n\n')
 
+  let trackingResult
   parseString(response.data, (err, result) => {
     console.log(err)
     console.log(result)
+    trackingResult = result
   })
 
   console.log(response.data)
@@ -55,9 +67,6 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
 
   return {
     statusCode: 200,
-    body: JSON.stringify({
-      message: 'Hello, world!',
-      input: event
-    })
+    body: JSON.stringify(trackingResult)
   }
 }
