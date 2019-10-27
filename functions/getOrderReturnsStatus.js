@@ -1,9 +1,19 @@
 import axios from 'axios'
 import { stripIndent } from 'common-tags'
 import { parseString } from 'xml2js'
+import { easyPostApiClient } from '../api'
 
-export const testHandler = async (event, context) => {
-  const USER_ID = '130SANDA3365'
+export const getOrderReturnsStatusHandler = async (event, context) => {
+  const orderReturnsResponse = await easyPostApiClient.get('/order_returns', {
+    params: {
+      limit: 250,
+      per_page: 250
+    }
+  })
+
+  console.log(`Order Returns: ${orderReturnsResponse.data.length.order_returns}`)
+
+  const USER_ID = process.env.USPS_API_USER_ID
   const USPS_API_URL = 'https://secure.shippingapis.com/shippingapi.dll?API=TrackV2&XML='
 
   const requestTracking = (xmlRequest) => `${USPS_API_URL}${xmlRequest}`

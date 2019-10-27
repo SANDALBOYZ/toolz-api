@@ -14,7 +14,7 @@ export const SYNC_TAG = 'Online'
  *  Queries
  */
 
-export const getProductVariantQuery = (barcode) => `
+export const getProductVariantQuery = barcode => `
   query ProductVariants {
     productVariants(
       first: 2,

@@ -4,7 +4,9 @@ import { GraphQLClient } from 'graphql-request'
 
 dotenv.config()
 
-const EASYPOST_API_URL = process.env.EASYPOST_API_URL || 'https://api.easypost.com/fulfillment/vendor/v2'
+const EASYPOST_API_URL =
+  process.env.EASYPOST_API_URL ||
+  'https://api.easypost.com/fulfillment/vendor/v2'
 const EASYPOST_ACCESS_TOKEN = process.env.EASYPOST_ACCESS_TOKEN
 
 export const easyPostApiClient = axios.create({
