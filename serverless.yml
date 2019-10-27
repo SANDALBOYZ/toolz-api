@@ -24,28 +24,23 @@ provider:
   runtime: nodejs8.10
 
 functions:
-  test:
-    handler: handlers.testHandler
-    events:
-      - http: GET /test
-      - http: 'GET /test/{proxy+}'
-  syncInventories:
-    handler: handlers.syncInventoriesHandler
-    events:
-      - http: GET /syncInventories
-      - http: 'GET /syncInventories/{proxy+}'
-  getTotalInventoryQuantity:
-    handler: handlers.getTotalInventoryQuantityHandler
-    events:
-      - http: GET /getTotalInventoryQuantity
-      - http: 'GET /getTotalInventoryQuantity/{proxy+}'
   deleteProductsOnEasyPost:
     handler: handlers.deleteProductsOnEasyPostHandler
     events:
       - http: GET /deleteProductsOnEasyPost
       - http: 'GET /deleteProductsOnEasyPost/{proxy+}'
-  generateBarcodes:
-    handler: handlers.generateBarcodesHandler
+  getOrderReturnsStatus:
+    handler: handlers.getOrderReturnsStatusHandler
     events:
-      - http: GET /generateBarcodes
-      - http: 'GET /generateBarcodes/{proxy+}'
+      - http: GET /getOrderReturnsStatus
+      - http: 'GET /getOrderReturnsStatus/{proxy+}'
+  getTotalInventoryQuantity:
+    handler: handlers.getTotalInventoryQuantityHandler
+    events:
+      - http: GET /getTotalInventoryQuantity
+      - http: 'GET /getTotalInventoryQuantity/{proxy+}'
+  syncInventories:
+    handler: handlers.syncInventoriesHandler
+    events:
+      - http: GET /syncInventories
+      - http: 'GET /syncInventories/{proxy+}'
