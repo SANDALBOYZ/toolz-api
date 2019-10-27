@@ -25,12 +25,10 @@ export const getOrderReturnsStatusHandler = async (event, context) => {
     // items: `order_returns[x].line_items[].product.title` or `order_returns[x].line_items[].product.barcode`
 
     const trackIdXmlString = orderReturnsResponse.data.order_returns.reduce(
-      (xmlString, orderReturn) => {
-        return stripIndents`
+      (xmlString, orderReturn) => stripIndents`
         ${xmlString}
         <TrackID ID="${orderReturn.tracking_code}" />
-      `
-      },
+      `,
       ''
     )
 
