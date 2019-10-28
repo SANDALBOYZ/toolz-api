@@ -1,8 +1,6 @@
-Branch `master`
+# toolz-api
 
 [![CircleCI](https://circleci.com/gh/SANDALBOYZ/toolz-api/tree/master.svg?style=svg)](https://circleci.com/gh/SANDALBOYZ/toolz-api/tree/master)
-
-# toolz-api
 
 This is a collection of small functions — lambdas — that are used to manage various interactions between services that SANDALBOYZ uses.
 One might refer to this collection of lambdas as a "serverless backend API".
