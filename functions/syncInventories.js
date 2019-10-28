@@ -118,6 +118,10 @@ export const syncInventoriesHandler = async (event, context) => {
 
   return {
     statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    },
     body: JSON.stringify({
       message:
         'EasyPost <> Shopify product inventory sync started! This is an asynchronous process. Check the logs (`sls logs -f <appName>`) for more details.',
