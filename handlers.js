@@ -1,6 +1,5 @@
 import {
   deleteProductsOnEasyPostHandler,
-  generateBarcodesHandler,
   getOrderReturnsStatusHandler,
   getTotalInventoryQuantityHandler,
   syncInventoriesHandler
@@ -8,7 +7,6 @@ import {
 
 export {
   deleteProductsOnEasyPostHandler,
-  generateBarcodesHandler,
   getOrderReturnsStatusHandler,
   getTotalInventoryQuantityHandler,
   syncInventoriesHandler
