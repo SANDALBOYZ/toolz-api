@@ -8,6 +8,9 @@ const USER_ID = process.env.USPS_API_USER_ID
 const USPS_API_URL =
   process.env.USPS_API_URL || 'https://secure.shippingapis.com/shippingapi.dll'
 
+/**
+ * Gets `order_returns` from EasyPost and then cross-references the tracking provided to get the status of the return.
+ */
 export const getOrderReturnsStatusHandler = async (event, context) => {
   try {
     console.log('Fetching `order_returns` from EasyPost')
