@@ -23,7 +23,7 @@ async function deleteProductsOnEasyPost (barcodePrefixes) {
     barcodeRegEx.test(product.barcode)
   )
 
-  productsToDelete.forEach(async (product) => {
+  productsToDelete.forEach(async product => {
     console.log(`Deleting ${product.title}, ${product.barcode}`)
     try {
       await easyPostApiClient.delete(`/products/${product.id}`)
@@ -36,9 +36,15 @@ async function deleteProductsOnEasyPost (barcodePrefixes) {
 
 // Pass barcode prefixes as a query parameter, i.e. `/deleteProductsOnEasyPost?barcodePrefixes=foo&barcodePrefixes=bar`
 export const deleteProductsOnEasyPostHandler = async (event, context) => {
-  await deleteProductsOnEasyPost(event.multiValueQueryStringParameters.barcodePrefixes)
+  await deleteProductsOnEasyPost(
+    event.multiValueQueryStringParameters.barcodePrefixes
+  )
 
   return {
-    statusCode: 200
+    statusCode: 200,
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Credentials': true
+    }
   }
 }
