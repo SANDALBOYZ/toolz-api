@@ -1,8 +1,7 @@
 {
-  "name": "stockz",
+  "name": "toolz-api",
   "version": "1.0.0",
-  "description": "A collection of inventory management tools for Shopify and EasyPost.",
-  "main": "index.js",
+  "description": "A collection of lambdas.",
   "scripts": {
     "dev": "sls offline -s dev",
     "test": "jest",
@@ -10,7 +9,7 @@
     "lint:fix": "standard --fix",
     "format": "prettier-standard --format --lint"
   },
-  "keywords": [],
+  "keywords": ["serverless", "lambda"],
   "author": "ryan@sandalboyz.com",
   "license": "ISC",
   "dependencies": {
