@@ -1,5 +1,7 @@
 # org: sandalboyz
-# app: toolz-api
+# app: toolz
+org: ryanchang
+app: stockz
 service:
   name: toolz-api
 
@@ -41,9 +43,10 @@ functions:
   getTotalInventoryQuantity:
     handler: handlers.getTotalInventoryQuantityHandler
     cors: true
+    timeout: 15
     events:
       - http: GET /getTotalInventoryQuantity
-      - http: 'GET /getTotalInventoryQuantity/{proxy+}'
+      # - http: 'GET /getTotalInventoryQuantity/{proxy+}'
   syncInventories:
     handler: handlers.syncInventoriesHandler
     cors: true
